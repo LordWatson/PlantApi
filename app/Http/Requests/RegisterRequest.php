@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['integer', 'exists:roles,id'],
+            'role' => 'integer|exists:roles,id',
         ];
     }
 }
