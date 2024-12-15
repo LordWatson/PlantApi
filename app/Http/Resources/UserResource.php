@@ -18,7 +18,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'roles' => $this->when($request->user()->isAdmin(), RoleResource::make($this->roles())),
+            'roles' => $this->when($request->user()->isAdmin(), RoleResource::make($this->role)),
         ];
 
         return $returnArray;

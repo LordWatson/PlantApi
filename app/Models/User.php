@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RolesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,12 +49,15 @@ class User extends Authenticatable
     }
 
     // user has one role through the pivot table
+    // define roles relationship
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles')
-            ->withTimestamps()
-            ->as('pivot')
-            ->first();
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function getRoleAttribute()
+    {
+        return $this->roles()->first();
     }
 
     // method to assign a role to a user
@@ -63,17 +67,15 @@ class User extends Authenticatable
 
         $this->roles()->attach($role);
 
-        //return the user to allow method chaining if needed
+        // return the user to allow method chaining if needed
         return $this;
     }
 
     // checks if a user is admin
     public function isAdmin()
     {
-        foreach($this->roles()->get() as $role) {
-            if ($role->name == 'Admin') {
-                return true;
-            }
+        if ($this->role->name == RolesEnum::Admin->value) {
+            return true;
         }
 
         return false;

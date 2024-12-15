@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RolesEnum;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 
@@ -14,7 +15,7 @@ class RolesSeeder extends Seeder
     {
         // create roles
         Role::create([
-            'name' => 'Admin',
+            'name' => RolesEnum::Admin,
             'description' => 'Admin can access all levels and perform all CRUD actions',
             'level' => 9999,
             'created_at' => now(),
@@ -23,7 +24,7 @@ class RolesSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'User',
+            'name' => RolesEnum::User,
             'description' => 'User can access some levels and perform some CRUD actions on their own resources',
             'level' => 1,
             'created_at' => now(),
