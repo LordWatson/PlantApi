@@ -47,10 +47,13 @@ class User extends Authenticatable
         ];
     }
 
-    // define roles relationship
+    // user has one role through the pivot table
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->withTimestamps()
+            ->as('pivot')
+            ->first();
     }
 
     // method to assign a role to a user
@@ -62,5 +65,17 @@ class User extends Authenticatable
 
         //return the user to allow method chaining if needed
         return $this;
+    }
+
+    // checks if a user is admin
+    public function isAdmin()
+    {
+        foreach($this->roles()->get() as $role) {
+            if ($role->name == 'Admin') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

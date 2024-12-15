@@ -13,7 +13,7 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
 
     Route::get('playground', function () {
-        $user = auth()->user()->roles;
+        $user = auth()->user()->role;
         dd($user);
     });
 });

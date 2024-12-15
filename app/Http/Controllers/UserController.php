@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     /**
+     * Create the Controller.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return response(UserResource::collection(User::all()), 200);
     }
 
     /**
