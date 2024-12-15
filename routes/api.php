@@ -10,7 +10,10 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
 {
     Route::post('/logout',[\App\Http\Controllers\AuthController::class, 'logout']);
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
+    Route::apiResource('users', \App\Http\Controllers\UserController::class);
+
+    Route::get('playground', function () {
+        $user = auth()->user()->roles;
+        dd($user);
     });
 });

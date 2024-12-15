@@ -46,7 +46,7 @@ class AuthTest extends TestCase
             'Authorization' => 'Bearer invalid-token',
             'Accept' => 'application/json',
         ])
-            ->get('/api/user');
+            ->get('/api/users');
 
         $response->assertStatus(401);
     }

@@ -19,6 +19,9 @@ class CreateUserAction
 
     public function execute(array $data) : User
     {
-        return User::create($data);
+        $user = User::create($data);
+        $user->assignRole('user');
+
+        return $user;
     }
 }

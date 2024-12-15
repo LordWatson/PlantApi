@@ -47,5 +47,20 @@ class User extends Authenticatable
         ];
     }
 
+    // define roles relationship
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
 
+    // method to assign a role to a user
+    public function assignRole($roleName)
+    {
+        $role = Role::where('name', $roleName)->firstOrFail();
+
+        $this->roles()->attach($role);
+
+        //return the user to allow method chaining if needed
+        return $this;
+    }
 }
