@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
         // create 10 users and give them all the user role
         for ($i = 0; $i < 10; $i++) {
             $user = \App\Models\User::factory()->create();
-            $user->assignRole(RolesEnum::Admin);
+            $user->assignRole(RolesEnum::User);
         }
     }
 }
