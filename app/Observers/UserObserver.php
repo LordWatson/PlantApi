@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Actions\ActivityLog\CreateActivityLog;
 use App\Actions\User\CreateUserAction;
+use App\Enums\EventEnum;
 use App\Models\ActivityLog;
 use App\Models\User;
 
@@ -28,7 +29,7 @@ class UserObserver
             'model' => User::class,
             'model_id' => $user->id,
             'user_id' => auth()->id() ?? null,
-            'event' => 'created',
+            'event' => EventEnum::Created,
             'original' => json_encode($user->getAttributes()),
             'changes' => json_encode($user->getChanges()),
         ];
@@ -47,7 +48,7 @@ class UserObserver
             'model' => User::class,
             'model_id' => $user->id,
             'user_id' => auth()->id() ?? null,
-            'event' => 'updated',
+            'event' => EventEnum::Updated,
             'original' => json_encode($user->getOriginal()),
             'changes' => json_encode($user->getChanges()),
         ];
@@ -63,7 +64,7 @@ class UserObserver
             'model' => User::class,
             'model_id' => $user->id,
             'user_id' => auth()->id() ?? null,
-            'event' => 'deleted',
+            'event' => EventEnum::Deleted,
             'original' => json_encode($user->getOriginal()),
             'changes' => json_encode($user->getChanges()),
         ];
