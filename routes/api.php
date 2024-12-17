@@ -3,6 +3,7 @@
 use App\Enums\RolesEnum;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->name('register');
@@ -16,6 +17,7 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
         ->middleware('can:viewAny,App\Models\User');
 
     Route::get('playground', function () {
+        dd(Auth::user());
         $role = Role::where('name', RolesEnum::Admin)
             ->select('level')
             ->first();

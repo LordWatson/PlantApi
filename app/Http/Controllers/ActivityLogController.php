@@ -2,30 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class ActivityLogController extends Controller
 {
-    /**
-     * Create the Controller.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(
-            UserResource::collection(User::all()), 200
-        );
+        //
     }
 
     /**
@@ -39,7 +26,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(ActivityLog $activityLog)
     {
         //
     }
@@ -47,7 +34,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, ActivityLog $activityLog)
     {
         //
     }
@@ -55,7 +42,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(ActivityLog $activityLog)
     {
         //
     }

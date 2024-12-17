@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Observers\UserObserver;
 use App\Policies\UserPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
@@ -25,9 +26,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // auth
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+
+        // models
         $this->configureModels();
+
+        // gates / policies
         Gate::policy(User::class, UserPolicy::class);
+
+        // observers
+        User::observe(UserObserver::class);
     }
 
     /**
