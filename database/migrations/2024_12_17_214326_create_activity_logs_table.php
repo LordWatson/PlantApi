@@ -17,6 +17,12 @@ return new class extends Migration
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('event');
+            $table->string('message')->nullable();
+            $table->integer('status_code')->nullable();
+            $table->string('method');
+            $table->string('path');
+            $table->string('user_agent');
+            $table->ipAddress('ip_address');
             $table->json('original')->nullable();
             $table->json('changes')->nullable();
             $table->timestamps();

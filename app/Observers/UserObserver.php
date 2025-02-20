@@ -28,11 +28,12 @@ class UserObserver
         $data = [
             'model' => User::class,
             'model_id' => $user->id,
-            'user_id' => auth()->id() ?? null,
             'event' => EventEnum::Created,
             'original' => json_encode($user->getAttributes()),
             'changes' => json_encode($user->getChanges()),
+            'status_code' => 201,
         ];
+
         $this->action->execute($data);
     }
 
@@ -47,11 +48,12 @@ class UserObserver
         $data = [
             'model' => User::class,
             'model_id' => $user->id,
-            'user_id' => auth()->id() ?? null,
             'event' => EventEnum::Updated,
             'original' => json_encode($user->getOriginal()),
             'changes' => json_encode($user->getChanges()),
+            'status_code' => 200,
         ];
+
         $this->action->execute($data);
     }
 
@@ -63,27 +65,12 @@ class UserObserver
         $data = [
             'model' => User::class,
             'model_id' => $user->id,
-            'user_id' => auth()->id() ?? null,
             'event' => EventEnum::Deleted,
             'original' => json_encode($user->getOriginal()),
             'changes' => json_encode($user->getChanges()),
+            'status_code' => 200,
         ];
+
         $this->action->execute($data);
-    }
-
-    /**
-     * Handle the User "restored" event.
-     */
-    public function restored(User $user): void
-    {
-        //
-    }
-
-    /**
-     * Handle the User "force deleted" event.
-     */
-    public function forceDeleted(User $user): void
-    {
-        //
     }
 }

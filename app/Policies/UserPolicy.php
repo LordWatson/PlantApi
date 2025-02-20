@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Actions\ActivityLog\CreateActivityLog;
+use App\Enums\EventEnum;
 use App\Enums\RolesEnum;
 use App\Models\Role;
 use App\Models\User;
@@ -9,7 +11,8 @@ use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
-    private $accessLevel;
+    private int $accessLevel;
+    private CreateActivityLog $activityLog;
 
     /**
      * Create a new policy instance.
@@ -23,6 +26,8 @@ class UserPolicy
 
         // set the required access level for this policy
         $this->accessLevel = $role->level;
+
+        $this->activityLog = new CreateActivityLog();
     }
 
     /**
@@ -30,6 +35,20 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
+        if(!$user->role->level >= $this->accessLevel){
+            // log the 403
+            $data = [
+                'model' => User::class,
+                'model_id' => $user->id,
+                'user_id' => auth()->id() ?? null,
+                'event' => EventEnum::Read,
+                'message' => 'Access Denied',
+            ];
+            $this->activityLog->execute($data);
+
+            return false;
+        }
+
         return $user->role->level >= $this->accessLevel;
     }
 

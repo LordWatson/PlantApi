@@ -2,6 +2,7 @@
 
 namespace App\Actions\User;
 
+use App\Enums\RolesEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +21,7 @@ class CreateUserAction
     public function execute(array $data) : User
     {
         $user = User::create($data);
-        $user->assignRole('user');
+        $user->assignRole(RolesEnum::User);
 
         return $user;
     }
