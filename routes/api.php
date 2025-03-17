@@ -1,9 +1,9 @@
 <?php
 
-use App\Enums\RolesEnum;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\RolesEnum;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->name('register');

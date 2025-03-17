@@ -14,13 +14,14 @@ class RoleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $returnArray = [
-            'id' => $this->when($request->user()->isAdmin(), $this->id),
-            'name' => $this->name,
-            'description' => $this->description,
-            'level' => $this->when($request->user()->isAdmin(), $this->level),
-        ];
+        $isAdmin = $request->user()->isAdmin();
+        $isRolesPath = str_contains($request->path(), '/roles');
 
-        return $returnArray;
+        return [
+            'id' => $this->when($isAdmin && $isRolesPath, $this->id),
+            'name' => $this->name,
+            'description' => $this->when($isRolesPath, $this->description),
+            'level' => $this->when($isAdmin && $isRolesPath, $this->level),
+        ];
     }
 }

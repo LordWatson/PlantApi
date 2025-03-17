@@ -50,4 +50,29 @@ class UserTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment(['name' => 'Admin User']);
     }
+
+    public function test_a_user_can_be_viewed() : void
+    {
+        // get the user
+        $user = User::find(1, ['id', 'name', 'email']);
+
+        // create the users token
+        $token = $user->createToken('test')->plainTextToken;
+
+        // send the request
+        $response = $this->actingAs($user)
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->get('/api/users/1');
+
+        // check response status and content
+        $response->assertStatus(200)
+            ->assertJson([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+    }
 }
