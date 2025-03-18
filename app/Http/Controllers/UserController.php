@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+
 class UserController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Create the Controller.
      *
@@ -24,6 +28,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         return response()->json(
             UserResource::collection(User::all()), 200
         );
@@ -42,6 +48,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         return response()->json(
             UserResource::make($user), 200
         );
@@ -52,6 +60,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         /*
          * email should be unique
          * if a user PUTs name through request with the existing name
@@ -91,6 +101,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $this->authorize('delete', $user);
     }
 }

@@ -35,21 +35,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        if(!$user->role->level >= $this->accessLevel){
-            // log the 403
-            $data = [
-                'model' => User::class,
-                'model_id' => $user->id,
-                'user_id' => auth()->id() ?? null,
-                'event' => EventEnum::Read,
-                'message' => 'Access Denied',
-            ];
-            $this->activityLog->execute($data);
-
-            return false;
-        }
-
-        return $user->role->level >= $this->accessLevel;
+        return $this->accessLevel($user);
     }
 
     /**
@@ -57,7 +43,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        //
+        return $this->accessLevel($user) || $user->id === $model->id;
     }
 
     /**
@@ -73,7 +59,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        //
+        return $this->accessLevel($user) || $user->id === $model->id;
     }
 
     /**
@@ -81,22 +67,29 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        //
+        return $this->accessLevel($user) || $user->id === $model->id;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * @param User $user
+     * @return bool
      */
-    public function restore(User $user, User $model): bool
+    public function accessLevel(User $user): bool
     {
-        //
-    }
+        if (!$user->role->level >= $this->accessLevel) {
+            // log the 403
+            $data = [
+                'model' => User::class,
+                'model_id' => $user->id,
+                'user_id' => auth()->id() ?? null,
+                'event' => EventEnum::Read,
+                'message' => 'Access Denied',
+            ];
+            $this->activityLog->execute($data);
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, User $model): bool
-    {
-        //
+            return false;
+        }
+
+        return $user->role->level >= $this->accessLevel;
     }
 }

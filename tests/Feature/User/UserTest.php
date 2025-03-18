@@ -75,4 +75,33 @@ class UserTest extends TestCase
                 'email' => $user->email,
             ]);
     }
+
+    public function test_a_user_can_be_updated()
+    {
+        // get the user
+        $user = User::find(1, ['id', 'name', 'email']);
+
+        // create the users token
+        $token = $user->createToken('test')->plainTextToken;
+
+        // send the request
+        $response = $this->actingAs($user)
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->put('/api/users/2',[
+                'name' => 'Updated Name',
+                'email' => 'updated@email.com',
+            ]);
+
+        // check response status and content
+        $response->assertStatus(200)
+            ->assertJson([
+                'updated' => [
+                    'name' => 'Updated Name',
+                    'email' => 'updated@email.com',
+                ]
+            ]);
+    }
 }

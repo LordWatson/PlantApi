@@ -13,8 +13,7 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
 {
     Route::post('/logout',[\App\Http\Controllers\AuthController::class, 'logout']);
 
-    Route::apiResource('users', \App\Http\Controllers\UserController::class)
-        ->middleware('can:viewAny,App\Models\User');
+    Route::apiResource('users', \App\Http\Controllers\UserController::class);
 
     Route::get('playground', function () {
         dd(Auth::user());
