@@ -7,7 +7,6 @@ use App\Enums\EventEnum;
 use App\Enums\RolesEnum;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -35,7 +34,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->accessLevel($user);
+        return $this->hasAccess($user);
     }
 
     /**
@@ -43,15 +42,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $this->accessLevel($user) || $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        //
+        return $this->canManageModel($user, $model);
     }
 
     /**
@@ -59,7 +50,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $this->accessLevel($user) || $user->id === $model->id;
+        return $this->canManageModel($user, $model);
     }
 
     /**
@@ -67,29 +58,43 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $this->accessLevel($user) || $user->id === $model->id;
+        return $this->canManageModel($user, $model);
     }
 
     /**
-     * @param User $user
-     * @return bool
+     * Check access level for the user.
      */
-    public function accessLevel(User $user): bool
+    private function hasAccess(User $user): bool
     {
-        if (!$user->role->level >= $this->accessLevel) {
-            // log the 403
-            $data = [
-                'model' => User::class,
-                'model_id' => $user->id,
-                'user_id' => auth()->id() ?? null,
-                'event' => EventEnum::Read,
-                'message' => 'Access Denied',
-            ];
-            $this->activityLog->execute($data);
-
+        if ($user->role->level < $this->accessLevel) {
+            $this->logAccessDenied($user);
             return false;
         }
 
-        return $user->role->level >= $this->accessLevel;
+        return true;
+    }
+
+    /**
+     * Check if the user has access or is the owner of the model.
+     */
+    private function canManageModel(User $user, User $model): bool
+    {
+        return $this->hasAccess($user) || $user->id === $model->id;
+    }
+
+    /**
+     * Log access denial.
+     */
+    private function logAccessDenied(User $user): void
+    {
+        $data = [
+            'model' => User::class,
+            'model_id' => $user->id,
+            'user_id' => auth()->id() ?? null,
+            'event' => EventEnum::Read,
+            'message' => 'Access Denied',
+        ];
+
+        $this->activityLog->execute($data);
     }
 }

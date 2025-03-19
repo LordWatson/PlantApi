@@ -3,9 +3,7 @@
 namespace App\Observers;
 
 use App\Actions\ActivityLog\CreateActivityLog;
-use App\Actions\User\CreateUserAction;
 use App\Enums\EventEnum;
-use App\Models\ActivityLog;
 use App\Models\User;
 
 class UserObserver
@@ -22,19 +20,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        // notify
-
-        // log
-        $data = [
-            'model' => User::class,
-            'model_id' => $user->id,
-            'event' => EventEnum::Created,
-            'original' => json_encode($user->getAttributes()),
-            'changes' => json_encode($user->getChanges()),
-            'status_code' => 201,
-        ];
-
-        $this->action->execute($data);
+        $this->logActivity($user, EventEnum::Created, 201);
     }
 
     /**
@@ -42,19 +28,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        // notify
-
-        // log
-        $data = [
-            'model' => User::class,
-            'model_id' => $user->id,
-            'event' => EventEnum::Updated,
-            'original' => json_encode($user->getOriginal()),
-            'changes' => json_encode($user->getChanges()),
-            'status_code' => 200,
-        ];
-
-        $this->action->execute($data);
+        $this->logActivity($user, EventEnum::Updated, 200);
     }
 
     /**
@@ -62,13 +36,21 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
+        $this->logActivity($user, EventEnum::Deleted, 200);
+    }
+
+    /**
+     * Log the activity for user events.
+     */
+    private function logActivity(User $user, EventEnum $event, int $statusCode): void
+    {
         $data = [
             'model' => User::class,
             'model_id' => $user->id,
-            'event' => EventEnum::Deleted,
+            'event' => $event,
             'original' => json_encode($user->getOriginal()),
             'changes' => json_encode($user->getChanges()),
-            'status_code' => 200,
+            'status_code' => $statusCode,
         ];
 
         $this->action->execute($data);
