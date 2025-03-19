@@ -13,20 +13,12 @@ class UserPolicy
     private int $accessLevel;
     private CreateActivityLog $activityLog;
 
-    /**
-     * Create a new policy instance.
-     */
-    public function __construct()
+    public function __construct(CreateActivityLog $activityLog)
     {
-        // get the admin role
-        $role = Role::where('name', RolesEnum::Admin)
-            ->select('level')
-            ->first();
-
-        // set the required access level for this policy
-        $this->accessLevel = $role->level;
-
-        $this->activityLog = new CreateActivityLog();
+        $this->activityLog = $activityLog;
+        $this->accessLevel = cache()->rememberForever('admin_role_level', function () {
+            return Role::where('name', RolesEnum::Admin)->value('level');
+        });
     }
 
     /**
