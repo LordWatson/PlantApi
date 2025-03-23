@@ -3,6 +3,7 @@
 namespace Tests\Feature\User;
 
 use App\Actions\User\CreateUserAction;
+use App\Enums\RolesEnum;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -49,6 +50,7 @@ class UserTest extends TestCase
         // assert forbidden
         $response->assertStatus(200);
         $response->assertJsonFragment(['name' => 'Admin User']);
+        $response->assertJsonFragment(['roles' => ['name' => RolesEnum::Admin]]);
     }
 
     public function test_a_user_can_be_viewed() : void
