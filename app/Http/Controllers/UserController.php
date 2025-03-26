@@ -31,7 +31,7 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
 
         return response()->json(
-            UserResource::collection(User::all()), 200
+            UserResource::collection(User::with('roles')->get()), 200
         );
     }
 

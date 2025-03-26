@@ -50,7 +50,7 @@ class UserTest extends TestCase
         // assert forbidden
         $response->assertStatus(200);
         $response->assertJsonFragment(['name' => 'Admin User']);
-        $response->assertJsonFragment(['roles' => ['name' => RolesEnum::Admin]]);
+        $response->assertJsonFragment(['role' => RolesEnum::Admin]);
     }
 
     public function test_a_user_can_be_viewed() : void

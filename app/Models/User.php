@@ -59,7 +59,9 @@ class User extends Authenticatable
     public function role() : Attribute
     {
         return new Attribute(
-            fn ($value) => $this->roles()->first()
+            fn ($value) => $this->roles
+                ->sortByDesc('level')
+                ->first()
         );
     }
 
