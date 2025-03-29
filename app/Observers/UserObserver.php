@@ -8,11 +8,9 @@ use App\Models\User;
 
 class UserObserver
 {
-    private CreateActivityLog $action;
 
-    public function __construct()
+    public function __construct(private CreateActivityLog $action)
     {
-        $this->action = new CreateActivityLog();
     }
 
     /**
