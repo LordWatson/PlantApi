@@ -1,5 +1,4 @@
 <?php
-// app/Services/Api/Clients/PlantApiClient.php
 
 namespace App\Services\Api\Clients;
 
@@ -42,6 +41,4 @@ class PerenualApiClient
             throw new ApiException("API connection failed: " . $e->getMessage());
         }
     }
-
-    // Add other API endpoints as needed...
 }
