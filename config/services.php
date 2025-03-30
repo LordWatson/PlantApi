@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    /*
+     * https://perenual.com/docs/api
+     * an api used to query plants
+     * */
+    'perenual' => [
+        'key' => env('PERENUAL_KEY'),
+        'url' => 'https://perenual.com',
+    ],
+
 ];

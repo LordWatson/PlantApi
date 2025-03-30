@@ -85,4 +85,11 @@ class User extends Authenticatable
 
         return false;
     }
+
+    // gives the user their plants
+    public function plants()
+    {
+        return $this->belongsToMany(Plant::class, 'user_plants')
+            ->withPivot('last_watered', 'last_watered_unit');
+    }
 }
