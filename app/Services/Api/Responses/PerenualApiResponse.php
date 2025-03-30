@@ -11,9 +11,6 @@ class PerenualApiResponse
 
     public function toArray(): array
     {
-        return [
-            'data' => $this->data,
-            'meta' => $this->meta,
-        ];
+        return $this->data;
     }
 }

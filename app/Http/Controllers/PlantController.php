@@ -2,64 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plant;
+use App\Services\Api\Exceptions\ApiException;
+use App\Services\Api\PerenualApiService;
 use Illuminate\Http\Request;
 
 class PlantController extends Controller
 {
+    public function __construct(protected PerenualApiService $apiService)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
+        /*
+         * @TODO: extract the api call into an action and handle things like error logging there
+         * */
+        try {
+            $response = $this->apiService->getSpecies();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+            return response()->json($response->toArray(), 200);
+        } catch (ApiException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Plant $plant)
+    public function show($speciesId)
     {
-        //
-    }
+        /*
+         * @TODO: extract the api call into an action and handle things like error logging there
+         * */
+        try {
+            $response = $this->apiService->getSingleSpecies($speciesId);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Plant $plant)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Plant $plant)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Plant $plant)
-    {
-        //
+            return response()->json($response->toArray(), 200);
+        } catch (ApiException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

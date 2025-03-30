@@ -4,17 +4,17 @@ namespace App\Services\Api\DTOs;
 
 use Spatie\LaravelData\Data;
 
-class PerenualData extends Data
+class PerenualSpeciesData extends Data
 {
     public function __construct(
-        public int $id,
-        public string $common_name,
-        public string $scientific_name,
-        public string $watering,
-        public array $sunlight,
+        public ?int $id,
+        public ?string $common_name,
+        public ?string $scientific_name,
+        public ?string $watering,
+        public ?array $sunlight,
     ) {}
 
-    public static function getSpeciesfromApi(array $data): self
+    public static function getSpeciesFromApi(array $data): self
     {
         return new self(
             id: $data['id'],

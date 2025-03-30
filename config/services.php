@@ -42,6 +42,7 @@ return [
     'perenual' => [
         'key' => env('PERENUAL_KEY'),
         'url' => 'https://perenual.com/api',
+        'cache_duration' => 300,
     ],
 
 ];
