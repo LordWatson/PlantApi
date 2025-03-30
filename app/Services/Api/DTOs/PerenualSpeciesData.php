@@ -20,8 +20,8 @@ class PerenualSpeciesData extends Data
             id: $data['id'],
             common_name: $data['common_name'],
             scientific_name: $data['scientific_name'][0],
-            watering: $data['watering'],
-            sunlight: $data['sunlight'],
+            watering: $data['watering'] ?? null,
+            sunlight: $data['sunlight'] ?? null,
         );
     }
 }
