@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\Role;
+use App\Services\Api\Clients\PerenualApiClient;
+use App\Services\Api\Exceptions\ApiException;
+use App\Services\Api\PerenualApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\RolesEnum;
@@ -17,6 +20,14 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
     Route::apiResource('plants', \App\Http\Controllers\PlantController::class);
 
     Route::get('playground', function () {
-        dd(Auth::user());
+        try {
+            $apiService = new PerenualApiService(new PerenualApiClient());
+            $response = $apiService->getSpecies();
+            return response()->json($response->toArray());
+        } catch (ApiException $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     });
 });
