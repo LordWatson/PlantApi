@@ -23,6 +23,10 @@ class PerenualApiClient
 
     public function getSpecies(array $params = []): array
     {
+        if(isset($params['q']) && !empty($params['q'])){
+            $params['q'] = urlencode($params['q']);
+        }
+
         return $this->handleApiRequest(
             endpoint: '/species-list',
             cachePrefix: 'perenual:species-list',

@@ -18,11 +18,13 @@ class PlantController extends Controller
      */
     public function index()
     {
+        $search = request()->query('q') ?? '';
+
         /*
          * @TODO: extract the api call into an action and handle things like error logging there
          * */
         try {
-            $response = $this->apiService->getSpecies();
+            $response = $this->apiService->getSpecies($search);
 
             return response()->json($response->toArray(), 200);
         } catch (ApiException $e) {

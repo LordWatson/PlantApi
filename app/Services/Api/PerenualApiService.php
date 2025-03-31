@@ -11,11 +11,13 @@ class PerenualApiService
 {
     public function __construct(protected PerenualApiClient $client)
     {
+        //
     }
 
-    public function getSpecies(int $page = 1, int $perPage = 10): PerenualApiResponse
+    public function getSpecies(string $search = '', int $page = 1, int $perPage = 10): PerenualApiResponse
     {
         $response = $this->client->getSpecies([
+            'q' => $search,
             'page' => $page,
             'per_page' => $perPage,
         ]);
